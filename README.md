@@ -1,4 +1,5 @@
 # PentestNotes
+
 Obsidian Notes for CPTS and other pentest resources
 
 CTRL + P to open command palette, Commit-and-sync
