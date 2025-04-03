@@ -164,6 +164,18 @@ Does not work with Python3!
 	- `?` list options
 	- `window -i 1` drops into a shell
 
+## ICMP Tunnel
+
+- encapsulates traffic with ICPM packets containing echo requests and responses
+- ptunnel-ng client and server tool (server on the pivot host)
+- git clone https://github.com/utoni/ptunnel-ng.git
+- install automake and autoconf
+- sudo ./autogen.sh
+- scp -r ptunnel-ng user@IP:~/
+- on pivot host in /ptunnel-ng/src: sudo ./ptunnel-ng -r[pivot_IP] -R22
+- Attack host: sudo ./ptunnel-ng -p[pivot_IP] -l2222 -r[pivot_IP] -R22
+- Attack host: ssh -p2222 -l[user] 127.0.0.1
+
 ## Chisel/HTTP Tunnel
 
 SOCKS5 Tunneling using HTTP. Useful to create a tunnel in a firewall restricted environment.
