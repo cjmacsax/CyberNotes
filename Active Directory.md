@@ -21,7 +21,16 @@
 - sAMAccountName: logon name. here is bjones
 - userPrincipalName: this attribute combines the RDN with the domain name, i.e. `bjones@inlanefreight.local`
 - Flexible Single Master Operation (FMSO): these roles allow DCs to continue authenticating without interruption if one of the DCs goes down.
-- 
+
+## Users and Machine Accounts
+
+### Local Accounts
+- assigned rights on a host either individually or with group membership.\
+- Administrator (SID S-1-5-domain-500) is the first account on a Windows install. It cannot be removed but can be disabled or renamed. It has full control over almost all resources.
+- Guest: diabled by default
+- SYSTEM: or (NT AUTHORITY\SYSTEM): is the default account used by the Operating System to perform functions. This is not necessarily a *user* unlike the Administrator account - it represents the OS. It does *not* appear in User Manager and can't be added to groups.
+- Network Service: predefined local account used by the Service Control Manager (SCM) for running Windows services. Network Services can present credentials to remote services.
+- Local Service: another predefined local account used by the SCM for services. Has minimal privileges.
 
 
 NTDS.dit
