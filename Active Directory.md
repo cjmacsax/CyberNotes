@@ -1,6 +1,6 @@
 # General
 
-#### Structure
+### Structure
 - Forest: collection of domains
 - Domain (tree): i.e. inlanefreight.local or freightlogistics.local
 - Subdomains: i.e. dev.inlanefreight.local or dev.freightlogistics.local
