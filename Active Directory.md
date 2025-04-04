@@ -36,7 +36,11 @@
 - granted rights from the domain to access resources (devices) on the domain.
 - Domain users can log in to any host that is configured for the domain.
 - KRBTGT is the AD account for key distribution
-- 
+- UserPrincipalName (UPN): primary logon for the user, usually the domain email address
+- SAMAccountName: logon name that supports the previous version of windows clients
+- `Get-ADUser -Identity [user]` to view user attributes
+
+Non-Domain Joined computers: can have `workgroups` that are not managed by domain policy, but allow for sharing resources to other hosts in the workgroup.
 
 
 NTDS.dit
