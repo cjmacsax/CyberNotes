@@ -32,6 +32,12 @@
 - Network Service: predefined local account used by the Service Control Manager (SCM) for running Windows services. Network Services can present credentials to remote services.
 - Local Service: another predefined local account used by the SCM for services. Has minimal privileges.
 
+### Domain Users
+- granted rights from the domain to access resources (devices) on the domain.
+- Domain users can log in to any host that is configured for the domain.
+- KRBTGT is the AD account for key distribution
+- 
+
 
 NTDS.dit
 - the heart of AD, stored on the DC at `C:\Windows\NTDS\` and is a database of AD information.
