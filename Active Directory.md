@@ -1,4 +1,4 @@
-# General
+# Info
 
 ### Structure
 - Forest: collection of domains
@@ -57,6 +57,20 @@ Manual NTDS.dit capture:
 	- copy NITD.dit - `cmd.exe /c copy [shadow copy name]\Windows\NTDS\NTDS.dit [output location]`
 
 
+## Groups
+
+Groups vs. OUs: Groups are specifically for setting permissions for resource access. OUs can organize many types of objects (including users and groups) by applying different settings. Rather than permissions, OUs can deploy many users at a time that will have a certain set of organizational attributes.
+
+- Group Type: defines the group's purpose
+	- Two main types - security and distribution
+	- Security groups: for ease of assigning permissions to a collection of users.
+	- Distribution groups: used by email applications to distribute messages to group members. Functions like a mailing list. This type of group does not affect user permissions.
+- Group Scope: shows how the group can be used within the domain
+	- Domain Local Group: only used to manage permissions to domain resources in the domain where the group was created. Local groups from other domains can't be used, but a local group can contain users from another domain.
+	- Global Groups: used to grant access to resources in another domain. global groups can only contain accounts from the domain it was created in.
+	- Universal Groups: used to manage resources distributed across multiple domains.
+
+Nested Group Membership: a Domain Local Group can have another Domain Local Group nested inside it. This means that a user in the nested group would inherit the privileges of the nested group and the parent group. It's important to be aware of privileges from the top of the chain to the bottom when assigning permissions. `Bloodhound` is useful for enumerating inherited privileges.
 
 # AD Protocols
 
