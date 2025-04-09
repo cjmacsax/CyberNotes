@@ -72,6 +72,24 @@ Groups vs. OUs: Groups are specifically for setting permissions for resource acc
 
 Nested Group Membership: a Domain Local Group can have another Domain Local Group nested inside it. This means that a user in the nested group would inherit the privileges of the nested group and the parent group. It's important to be aware of privileges from the top of the chain to the bottom when assigning permissions. `Bloodhound` is useful for enumerating inherited privileges.
 
+
+## Privileges
+
+- Rights vs. Privileges: rights are assigned to a user or group with permissions to access objects. Privileges are permissions to perform actions.
+- Some important built-in AD groups include:
+	- Account Operators
+	- Administrators
+	- Backup Operators
+	- Domain Admins, Computers, Controllers
+	- Server Operators
+- `Get-ADGroup -Identity "Server Operators" -Properties *`
+- User Rights Assignment
+	- https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/user-rights-assignment
+	- (these are SeBackupPrivilege etc.)
+	- User Rights Vectors https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/privilege-escalation-abusing-tokens.html
+	- `whoami /priv`
+	- 
+
 # AD Protocols
 
 
