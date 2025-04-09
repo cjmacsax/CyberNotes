@@ -57,9 +57,13 @@ Manual NTDS.dit capture:
 	- copy NITD.dit - `cmd.exe /c copy [shadow copy name]\Windows\NTDS\NTDS.dit [output location]`
 
 
-## Groups
+### Groups
 
-Groups vs. OUs: Groups are specifically for setting permissions for resource access. OUs can organize many types of objects (including users and groups) by applying different settings. Rather than permissions, OUs can deploy many users at a time that will have a certain set of organizational attributes.
+Groups vs. OUs: Groups are specifically for setting permissions for resource access. OUs can organize many types of objects (including users and groups) by applying different settings. Rather than permissions, OUs can deploy many users at a time that will have a certain set of organizational attributes, such as nomenclature characteristics.
+
+In short:
+- Groups = permissions
+- OUs = configuration settings
 
 - Group Type: defines the group's purpose
 	- Two main types - security and distribution
@@ -73,7 +77,7 @@ Groups vs. OUs: Groups are specifically for setting permissions for resource acc
 Nested Group Membership: a Domain Local Group can have another Domain Local Group nested inside it. This means that a user in the nested group would inherit the privileges of the nested group and the parent group. It's important to be aware of privileges from the top of the chain to the bottom when assigning permissions. `Bloodhound` is useful for enumerating inherited privileges.
 
 
-## Privileges
+### Privileges
 
 - Rights vs. Privileges: rights are assigned to a user or group with permissions to access objects. Privileges are permissions to perform actions.
 - Some important built-in AD groups include:
@@ -88,7 +92,17 @@ Nested Group Membership: a Domain Local Group can have another Domain Local Grou
 	- (these are SeBackupPrivilege etc.)
 	- User Rights Vectors https://book.hacktricks.wiki/en/windows-hardening/windows-local-privilege-escalation/privilege-escalation-abusing-tokens.html
 	- `whoami /priv`
-	- 
+
+
+## AD Hardening
+
+- LAPS - Local Administrator Password Solution. This randomizes and rotates local admin passwords to prevent lateral movement.
+- Group Policy Security Settings to look at:
+	- Account Policies: how user accounts interact with the domain
+	- Local Policies: automate host configurations on the domain to apply best security settings
+	- Software Restriction Policies
+	- Application Control Policies
+- Account Separation: If the user `sjones` has some administrative functions over a software, he should have a `sjones_adm` with the rights to conduct those activities (or, the service's admin account)
 
 # AD Protocols
 
