@@ -189,7 +189,7 @@ Powershell
 		- This command creates a new user named Mark and adds them to the admin group (we didn't get to log in as the person whose hash we had, we simply passed the hash and borrowed their rights for a process)
 
 
-# Kerberoasting
+# Kerberos Tickets
 
 ## Export Kerberos Tickets
 
