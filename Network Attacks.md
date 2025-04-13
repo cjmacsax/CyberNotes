@@ -88,7 +88,7 @@ PHP
 
 # Common Services
 
-See `Exploiting: Password Attacks` for brute forcing
+See `Password Attacks` for brute forcing
 
 
 RSYNC, 873
