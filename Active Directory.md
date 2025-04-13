@@ -172,6 +172,7 @@ The goal is get the victim to communicate with our system and capture the NetNTL
 	- `-w` starts the WPAD rogue proxy server
 	- `-f` attempts to fingerprint the remote host operating system and version
 - Crack NTLMv2 hash with `hashcat -m 5600`
+- logs are stored in `/usr/share/responder/logs`
 # Pass the Hash
 Some of these techniques are very useful for pivoting within a network. Pay close attention to the IP address and domain you are using (and which device the hashes are for )
 
