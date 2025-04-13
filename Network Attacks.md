@@ -90,7 +90,6 @@ PHP
 
 See `Password Attacks` for brute forcing
 
-
 RSYNC, 873
 - service for locally and remotely copying files
 - `nc -nv [IP] 873` to find shares
@@ -132,54 +131,53 @@ TELNET, 23
 
 
 SMTP, 25, 587
-	- can use telnet
-	- metasploit: `smtp_version`, `smtp_enum`
-	- `nmap --script smtp-open-relay`
-	- `nmap --script banner,*smtp*`
-	- `smtp-user-enum` tool
-	- When connected, you can use `VRFY [user]` to check if a user exists
-	- https://github.com/pentestmonkey/smtp-user-enum use this perl script to enumerate users with a wordlist.
-		- Ex. `smtp-user-enum -M VRFY -U user.list -D inlanefreight.htb -t [IP]`
-		- `VRFY` is the method used for enumerating, can also be `EXPN` or `RCPT`
-	- https://github.com/pentestmonkey/smtp-user-enum Office365 Spray
-		- `python3 o365spray --enum -U users.txt --domain domain`
+- can use telnet
+- metasploit: `smtp_version`, `smtp_enum`
+- `nmap --script smtp-open-relay`
+- `nmap --script banner,*smtp*`
+- When connected, you can use `VRFY [user]` to check if a user exists
+- https://github.com/pentestmonkey/smtp-user-enum use this perl script to enumerate users with a wordlist.
+	- Ex. `smtp-user-enum -M VRFY -U user.list -D inlanefreight.htb -t [IP]`
+	- `VRFY` is the method used for enumerating, can also be `EXPN` or `RCPT`
+- https://github.com/pentestmonkey/smtp-user-enum Office365 Spray
+	- `python3 o365spray --enum -U users.txt --domain domain`
 
 POP3, 110
-	- can use telnet
-	- once connected:
-		- `USER [user]`
-		- `PASS [password]`
-		- `STAT` confirms connection
-		- `LIST` shows messages
-	- to interact over an SSL encrypted  server, use `openssl s_client -connect [IP]:pop3s`
-	- server commands: 
-		- https://academy.hackthebox.com/module/112/section/1073
-		- https://medium.com/@timothy.tanzijing/footprinting-htb-imap-pop3-writeup-5e5c99547f8a
+- can use telnet
+- once connected:
+	- `USER [user]`
+	- `PASS [password]`
+	- `STAT` confirms connection
+	- `LIST` shows messages
+- to interact over an SSL encrypted  server, use `openssl s_client -connect [IP]:pop3s`
+- server commands: 
+	-  https://academy.hackthebox.com/module/112/section/1073
+	-  https://medium.com/@timothy.tanzijing/footprinting-htb-imap-pop3-writeup-5e5c99547f8a
 
 IMAP, 143
-		- `LOGIN [username] [password]`
-		- each command requires a random string to track replies. use c1, c2, c3, etc.
-		- `LIST "" "*" 23`
-		- to interact over an SSL encrypted  server, use `openssl s_client -connect [IP]:imaps`
-		- server commands https://academy.hackthebox.com/module/112/section/1073, https://medium.com/@timothy.tanzijing/footprinting-htb-imap-pop3-writeup-5e5c99547f8a
+- `LOGIN [username] [password]`
+- each command requires a random string to track replies. use c1, c2, c3, etc.
+- `LIST "" "*" 23`
+-  to interact over an SSL encrypted  server, use `openssl s_client -connect [IP]:imaps`
+- server commands https://academy.hackthebox.com/module/112/section/1073, https://medium.com/@timothy.tanzijing/footprinting-htb-imap-pop3-writeup-5e5c99547f8a
 
 
 NFS, port 111, 2049
-	- may show up as RPC (remote procedure call)
-	- `showmount -e [IP]` enumerate shares
-	- install `nfs-common`
-	- create folder to mount file share `mkdir /tmp/mount`
-		- `sudo mount -t nfs [IP]:/[share_path] [mount_path]`
+- may show up as RPC (remote procedure call)
+- `showmount -e [IP]` enumerate shares
+- install `nfs-common`
+- create folder to mount file share `mkdir /tmp/mount`
+- `sudo mount -t nfs [IP]:/[share_path] [mount_path]`
 
 SNMP, 161, 162
-	- `snmpwalk -v2c -c public [IP]`
-		- try `backup` instead of `public`
-		- the version (`-v`) you need to find with enumerating
-		- `-c` is the name of the community string (get these with the nmap script below)
-	- `onesixtyone` brute force
-		- `onesixtyone -c [wordlist] [IP]`
-	- Once you enumerate a community string with `snmpwalk` or `onesixtyone`, use `braa [string]@IP:.1.3.6.*`
-	- nmap script `snmp-*` and save to an output file. Or just use `snmp-brute`
+- `snmpwalk -v2c -c public [IP]`
+	-  try `backup` instead of `public`
+	- the version (`-v`) you need to find with enumerating
+	- `-c` is the name of the community string (get these with the nmap script below)
+- `onesixtyone` brute force
+	- `onesixtyone -c [wordlist] [IP]`
+- Once you enumerate a community string with `snmpwalk` or `onesixtyone`, use `braa [string]@IP:.1.3.6.*`
+- nmap script `snmp-*` and save to an output file. Or just use `snmp-brute`
 
 WInRM, 5985,5986
 - might show as `wsman`
@@ -193,21 +191,20 @@ dnsdumpster.com
 ### Tools
 
 DNSenum
-	- discovers subdomains and gathers DNS info
-	- dictionary, brute-forcing, zone transfers
-	- `-r`- recursive option
-	- `dnsenum --enum [domain] -f [wordlist] -r`
-	- `dnsenum --dnsserver [IP] -f [wordlist] [domain]`
-	- use `dnsenum` on any subdomains found with `axfr` from dig
+- discovers subdomains and gathers DNS info
+- dictionary, brute-forcing, zone transfers
+- `-r`- recursive option
+- `dnsenum --enum [domain] -f [wordlist] -r`
+- `dnsenum --dnsserver [IP] -f [wordlist] [domain]`
+- use `dnsenum` on any subdomains found with `axfr` from dig
 
 Dig
-	- `dig [record type] [domain] @[IP]`
-		- record types: `ns, A, AAAA, CNAME, TXT, MX, SOA, axfr, any`
-		- `axfr` does a zone transfer when you find a valid subdomain. Finds internal DNS servers
-		- Continue to run `axfr` with each subdomain you discover. May need to update `/etc/hosts`
+- `dig [record type] [domain] @[IP]`
+-  record types: `ns, A, AAAA, CNAME, TXT, MX, SOA, axfr, any`
+	- `axfr` does a zone transfer when you find a valid subdomain. Finds internal DNS servers
+	-  Continue to run `axfr` with each subdomain you discover. May need to update `/etc/hosts`
 	- add `dig @[IP] [domain]` to query a specific name server (the IP)
-	- Reverse lookup
-		- `dig -x [IP]`
+- Reverse lookup: `dig -x [IP]`
 
 Fierce
 - `fierce --domain [domain]` enumerates DNS servers of a root domain and scans for the DNS zone transfer
@@ -221,11 +218,11 @@ Subdomain Enumeration
 	- `python 3 subbrute inlanefreight.com -s names.txt -r resolvers.txt`
 
 Gobuster
-	- subdomains, directories, vhost, etc.
-	- `-t` number of threads
-	- `-k` ignores SSL/TLS certificate errors
-	- `-o` saves to a file
-	- dir mode: `-x.txt,.html` etc.
+- subdomains, directories, vhost, etc.
+- `-t` number of threads
+- `-k` ignores SSL/TLS certificate errors
+- `-o` saves to a file
+- dir mode: `-x.txt,.html` etc.
 
 DNS Spoofing Attack
 - Perform Local DNS Cache Poisoning with `Ettercap` or `Bettercap`
@@ -237,28 +234,28 @@ DNS Spoofing Attack
 #### How DNS works
 
 Process
-	- hosts file first
-	- local cache
-	- DNS resolver (ISP or public resolver like Google DNS)
-	- Root name server
-	- TLD (top-level domain) Server (there is a .com server, .org, etc.)
-	- Authoritative server (managed by hosting providers or domain registrars)
+- hosts file first
+-  local cache
+- DNS resolver (ISP or public resolver like Google DNS)
+- Root name server
+- TLD (top-level domain) Server (there is a .com server, .org, etc.)
+- Authoritative server (managed by hosting providers or domain registrars)
 
 Record Types
-	- A: IPv4 addresses
-	- AAAA: IPv6 addresses
-	- CNAME: alias for a hostname, pointing to another hostname
-	- MX: mail exchange record
-	- NS: Name server record, delegates a DNS zone to a specific authoritative name server
-	- TXT: text record
-	- SOA: start of authority record, specifies administrative info about a DNS zone
-	- SRV: Service record
-	- PTR: pointer record, used for reverse DNS lookups, mapping an IP address to a hostname
+- A: IPv4 addresses
+- AAAA: IPv6 addresses
+- CNAME: alias for a hostname, pointing to another hostname
+- MX: mail exchange record
+- NS: Name server record, delegates a DNS zone to a specific authoritative name server
+- TXT: text record
+- SOA: start of authority record, specifies administrative info about a DNS zone
+- SRV: Service record
+- PTR: pointer record, used for reverse DNS lookups, mapping an IP address to a hostname
 
 Zone Transfer
-	- Zone: part of a domain namespace that an entity or admin manages
-	- (example.com, mail.example.com, blog.example.com are all in the same DNS zone). 
-	- The zone file resides on a DNS server
+- Zone: part of a domain namespace that an entity or admin manages
+- (example.com, mail.example.com, blog.example.com are all in the same DNS zone). 
+- The zone file resides on a DNS server
 
 
 
