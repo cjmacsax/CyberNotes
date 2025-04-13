@@ -93,6 +93,11 @@ Hash Identify:
 	- `m` is hash type
 	- `hash.hash` is the file containing the hash
 
+Using other devices
+- `-d` backend device ID
+- `-D` open-cl-device-id
+- `hashcat -I` to view device options. GPU is backend device 1 usually
+
 #### Quick Hash ID Notes
 
 
