@@ -103,34 +103,6 @@ Nested Group Membership: a Domain Local Group can have another Domain Local Grou
 	- Software Restriction Policies
 	- Application Control Policies
 - Account Separation: If the user `sjones` has some administrative functions over a software, he should have a `sjones_adm` with the rights to conduct those activities (or, the service's admin account)
-
-# Enumeration
-
-## Users
-
-- `Kerbrute` https://github.com/ropnop/kerbrute.git
-	- `sudo make all` will compile all types of binaries and place them in `/kerbrute/dist`
-		- Note: try to compile on the target if possible
-		- move binaries into the PATH, such as `/usr/local/bin/kerbrute` to easily use from anywhere
-	- Kerberos preauth failures usually don't trigger logs or alerts.
-	- `jsmith.txt` or `jsmith2.txt` username lists from `Insidetrust` https://github.com/insidetrust/statistically-likely-usernames
-	- `Kerbrute userenum -d [domain] --dc [IP] jsmith.txt -o [outfile]`
-		- We should have retrieved the dc IP from our enumeration steps
-
-
-## LLMNR & NBT-NS Primer
-
-Link-Local Multicast Name Resolution and NetBIOS Name Service are an alternate method of host identification that can be used when DNS fails. LLMNR is UDP 5355. LLMNR/NBT-NS allows any host on the network to respond, meaning we can easily spoof if we have access to the network.
-
-The goal is get the victim to communicate with our system and capture the NetNTLM hash for cracking.
-
-### Using Responder
-
-`sudo responder -I [interface]`
-- `-A` analyze mode, allows us to see NBT-NS or LLMNR requests without poisoning (just for recon, not useful for conducting this attack)
-- `-wf` may not be necessary, but:
-	- `-w` starts the WPAD rogue proxy server
-	- `-f` attempts to fingerprint the remote host operating system and version
 # AD Protocols
 
 
@@ -172,6 +144,33 @@ The goal is get the victim to communicate with our system and capture the NetNTL
 - Format `$DCC2$10240#bjones#e4e938d12fe5974dc42a90120bd9c90f`
 
 
+# Enumeration
+
+## Users
+
+- `Kerbrute` https://github.com/ropnop/kerbrute.git
+	- `sudo make all` will compile all types of binaries and place them in `/kerbrute/dist`
+		- Note: try to compile on the target if possible
+		- move binaries into the PATH, such as `/usr/local/bin/kerbrute` to easily use from anywhere
+	- Kerberos preauth failures usually don't trigger logs or alerts.
+	- `jsmith.txt` or `jsmith2.txt` username lists from `Insidetrust` https://github.com/insidetrust/statistically-likely-usernames
+	- `Kerbrute userenum -d [domain] --dc [IP] jsmith.txt -o [outfile]`
+		- We should have retrieved the dc IP from our enumeration steps
+
+
+## LLMNR & NBT-NS Primer
+
+Link-Local Multicast Name Resolution and NetBIOS Name Service are an alternate method of host identification that can be used when DNS fails. LLMNR is UDP 5355. LLMNR/NBT-NS allows any host on the network to respond, meaning we can easily spoof if we have access to the network.
+
+The goal is get the victim to communicate with our system and capture the NetNTLM hash for cracking.
+
+### Using Responder
+
+`sudo responder -I [interface]`
+- `-A` analyze mode, allows us to see NBT-NS or LLMNR requests without poisoning (just for recon, not useful for conducting this attack)
+- `-wf` may not be necessary, but:
+	- `-w` starts the WPAD rogue proxy server
+	- `-f` attempts to fingerprint the remote host operating system and version
 # Pass the Hash
 Some of these techniques are very useful for pivoting within a network. Pay close attention to the IP address and domain you are using (and which device the hashes are for )
 
