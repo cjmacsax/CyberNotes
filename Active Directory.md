@@ -117,6 +117,18 @@ Nested Group Membership: a Domain Local Group can have another Domain Local Grou
 	- `Kerbrute userenum -d [domain] --dc [IP] jsmith.txt -o [outfile]`
 		- We should have retrieved the dc IP from our enumeration steps
 
+
+## LLMNR & NBT-NS Primer
+
+Link-Local Multicast Name Resolution and NetBIOS Name Service are an alternate method of host identification that can be used when DNS fails. LLMNR is UDP 5355. LLMNR/NBT-NS allows any host on the network to respond, meaning we can easily spoof if we have access to the network.
+
+The goal is get the victim to communicate with our system and capture the NetNTLM hash for cracking.
+
+### Using Responder
+
+- `-A` analyze mode, allows us to see NBT-NS or LLMNR requests without poisoning.
+- `-w` starts the WPAD rogue proxy server
+- `-f` attempts to fingerprint the remote host operating system and version
 # AD Protocols
 
 
