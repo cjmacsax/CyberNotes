@@ -126,9 +126,11 @@ The goal is get the victim to communicate with our system and capture the NetNTL
 
 ### Using Responder
 
-- `-A` analyze mode, allows us to see NBT-NS or LLMNR requests without poisoning.
-- `-w` starts the WPAD rogue proxy server
-- `-f` attempts to fingerprint the remote host operating system and version
+`sudo responder -I [interface]`
+- `-A` analyze mode, allows us to see NBT-NS or LLMNR requests without poisoning (just for recon, not useful for conducting this attack)
+- `-wf` may not be necessary, but:
+	- `-w` starts the WPAD rogue proxy server
+	- `-f` attempts to fingerprint the remote host operating system and version
 # AD Protocols
 
 
