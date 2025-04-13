@@ -441,15 +441,15 @@ metasploit `mssql_ping` scanner, `mssql_login`
 
 
 Other Clients
-	- `locate mssqlclient` to find what you have
-	- SQL Server Management Studio (SSMS)
-	- `mssql-cli`
-	- SQL Server Powershell
-	- HeidiSQL
-	- SQLPro
-	- Impacket: `mssqlclient.py`
-	- `sqsh`
-	- `netexec mssql`
+- `locate mssqlclient` to find what you have
+- SQL Server Management Studio (SSMS)
+- `mssql-cli`
+- SQL Server Powershell
+- HeidiSQL
+- SQLPro
+- Impacket: `mssqlclient.py`
+- `sqsh`
+- `netexec mssql`
 
 
 ### Capture MSSQL Service Hash
