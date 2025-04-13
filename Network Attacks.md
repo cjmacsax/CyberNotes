@@ -92,22 +92,21 @@ See `Password Attacks` for brute forcing
 
 
 RSYNC, 873
-	- service for locally and remotely copying files
-	- `nc -nv [IP] 873` to find shares
-	- `rsync -avz --list-only rsync://[IP]/` add a `[share]` at the end to enumerate a specific share
-	- to download files, remove `--list-only` and add the `/share/file` at the end of the address and a `/local/destination`
-	- use rsync over ssh https://phoenixnap.com/kb/how-to-rsync-over-ssh
-	- 
+- service for locally and remotely copying files
+- `nc -nv [IP] 873` to find shares
+- `rsync -avz --list-only rsync://[IP]/` add a `[share]` at the end to enumerate a specific share
+-  to download files, remove `--list-only` and add the `/share/file` at the end of the address and a `/local/destination`
+- use rsync over ssh https://phoenixnap.com/kb/how-to-rsync-over-ssh
 
 FTP, listens on 21
-	- `ftp user@[IP] -P [port]`
-	- `/etc/ftpusers` is where users are stored
-	- `/etc/vsftpd.conf` is config for vsFTPd server
-	- recursive listing - `ls -R` when logged in
-	- FTP Bounce Attack
-		- Use an intermediary machine running FTP to access an internal target
-		- In this example we are bouncing the nmap command to enumerate port 80 on the internal target by using the `-b` flag
-		- `nmap -p80 -b [user]:[pass]@[intermediary_IP] [target_IP]`
+- `ftp user@[IP] -P [port]`
+- `/etc/ftpusers` is where users are stored
+- `/etc/vsftpd.conf` is config for vsFTPd server
+- recursive listing - `ls -R` when logged in
+- FTP Bounce Attack
+	- Use an intermediary machine running FTP to access an internal target
+	- In this example we are bouncing the nmap command to enumerate port 80 on the internal target by using the `-b` flag
+	- `nmap -p80 -b [user]:[pass]@[intermediary_IP] [target_IP]`
 
 SQL, 1433, 1434,
 - MySQL is on 3306
@@ -115,20 +114,20 @@ SQL, 1433, 1434,
 - See `MySQL` and `MSSQL` notes
 
 SSH, 22
-	- `ssh-audit.py`
-	- brute force: `ssh user@ip -o PreferredAuthentications=password`
+- `ssh-audit.py`
+- brute force: `ssh user@ip -o PreferredAuthentications=password`
 	- once you get credentials:
-		- `ssh -i id_rsa user@[IP]`
-		- remember to `chmod`
+	- `ssh -i id_rsa user@[IP]`
+	- remember to `chmod`
 
 SCP, 22
-	- secure copy protocol
-	- client for downloading files over SSH
-	- `scp username@IP:/path_to_file [output destination]`
+- secure copy protocol
+- client for downloading files over SSH
+- `scp username@IP:/path_to_file [output destination]`
 
 TELNET, 23
-	- remote CLI tool
-	- Can be used with SMTP, IRC, HTTP, FTP, or POP3
+- remote CLI tool
+- Can be used with SMTP, IRC, HTTP, FTP, or POP3
 
 
 
