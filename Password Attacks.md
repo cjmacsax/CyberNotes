@@ -87,6 +87,17 @@ Username mutation https://github.com/urbanadventurer/username-anarchy
 	- `username-anarchy -i [file with names] > [output]`
 	- With just a name and no file: `username_anarchy [firstname] [lastname] > [output]`
 
+Sample Script
+- This bash script is designed as a quick way to address a discovered username format of `F9L8` (randomly generated GUIDs for an AD environment only using capital letters and numbers)
+
+```bash
+#!/bin/bash
+
+for x in {{A..Z},{0..9}}{{A..Z},{0..9}}{{A..Z},{0..9}}{{A..Z},{0..9}}
+    do echo $x;
+done
+```
+
 
 # Network Service Password Attacks
 
