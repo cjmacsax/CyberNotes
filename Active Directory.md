@@ -148,17 +148,8 @@ Nested Group Membership: a Domain Local Group can have another Domain Local Grou
 
 ## Users
 
-- `Kerbrute` https://github.com/ropnop/kerbrute.git
-	- `sudo make all` will compile all types of binaries and place them in `/kerbrute/dist`
-		- Note: try to compile on the target if possible
-		- move binaries into the PATH, such as `/usr/local/bin/kerbrute` to easily use from anywhere
-	- Kerberos preauth failures usually don't trigger logs or alerts.
-	- `jsmith.txt` or `jsmith2.txt` username lists from `Insidetrust` https://github.com/insidetrust/statistically-likely-usernames
-	- `Kerbrute userenum -d [domain] --dc [IP] jsmith.txt -o [outfile]`
-		- We should have retrieved the dc IP from our enumeration steps
-
-
-## LLMNR & NBT-NS Primer
+Check [[Enumeration]] for host discovery techniques
+### LLMNR & NBT-NS Primer
 
 Link-Local Multicast Name Resolution and NetBIOS Name Service are an alternate method of host identification that can be used when DNS fails. LLMNR is UDP 5355. LLMNR/NBT-NS allows any host on the network to respond, meaning we can easily spoof if we have access to the network.
 
@@ -184,6 +175,19 @@ The goal is get the victim to communicate with our system and capture the NetNTL
 	- run the program, and then press `ESC` to enter the interactive console
 	- `GET NTLMV2UNIQUE`
 	- `GET NTLMV2USERNAMES`
+
+### AD User/Password Attacks
+
+AD specific wordlists 
+- `jsmith.txt` or `jsmith2.txt` username lists from `Insidetrust` https://github.com/insidetrust/statistically-likely-usernames
+
+`Kerbrute` https://github.com/ropnop/kerbrute.git
+- Setting up
+	- `sudo make all` will compile all types of binaries and place them in `/kerbrute/dist`
+	- Note: try to compile on the target if possible
+	- move binaries into the PATH, such as `/usr/local/bin/kerbrute` to easily use from anywhere
+- `Kerbrute userenum -d [domain] --dc [IP] jsmith.txt -o [outfile]`
+
 
 # Pass the Hash
 Some of these techniques are very useful for pivoting within a network. Pay close attention to the IP address and domain you are using (and which device the hashes are for )
