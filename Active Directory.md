@@ -164,7 +164,7 @@ Link-Local Multicast Name Resolution and NetBIOS Name Service are an alternate m
 
 The goal is get the victim to communicate with our system and capture the NetNTLM hash for cracking.
 
-### Using Responder
+### Using Responder (from a Linux host)
 
 `sudo responder -I [interface]`
 - `-A` analyze mode, allows us to see NBT-NS or LLMNR requests without poisoning (just for recon, not useful for conducting this attack)
