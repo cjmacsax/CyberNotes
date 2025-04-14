@@ -96,6 +96,9 @@ Dirsearch
 - `-r` recursive
 - `-R` recursive depth
 
+FFUF
+- 
+
 Gobuster (most of these options apply to `dir` mode)
 - `-u` host
 - `-t` threads (64 threads is a good option)
