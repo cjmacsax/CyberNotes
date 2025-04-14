@@ -42,6 +42,52 @@ Example usage
 - `-n` specify a non-default port number
 
 
+# User/Pass Mutations
+
+CeWL: word scanner
+- `cewl [URL] -d 4 -m 6 --lowercase -w [website.wordlist]`
+	- `-d` depth to spider the website
+	- `-m` minimum length of word to record
+	- store in `--lowercase` for mutation purposes
+	- output to a wordlist file `[name].wordlist`
+	- `wc -l [wordlist]` to count how many you made
+
+Hashcat
+	- both `hashcat` and `john` have the `best64.rule` for common mutations
+	- `hashcat --force [wordlist] -r [custom.rule file] --stdout | sort -u > mut_password.list` 
+		- `[wordlist]` should be lowercase passwords (see CeWL above)
+		- `custom.rule` is the mutation rules (see below)
+		- `mut_password.list` is the output
+	- `ls /usr/share/hashcat/rules/` shows rule files
+
+Hashcat mutation syntax
+	- https://hashcat.net/wiki/doku.php?id=rule_based_attack
+	- `:` do nothing
+	- `l` lowercase all letters
+	- `u` uppercase all letters
+	- `c` capitalize first letter and lowercase the rest
+	- `sXY` replaces every `X` with `Y`
+	- `$!` Add exclamation at the end
+
+Credential Stuffing
+- `hydra -C [user_pass.list] [protocol]://[IP]`
+	- the `user_pass.list` should be formatted with items as `username:password`
+
+
+Username mutation https://github.com/urbanadventurer/username-anarchy
+- Consider some common business username conventions:
+	- Jane Doe
+	- jdoe
+	- jjdoe
+	- janedoe
+	- jane.doe
+	- doe.jane
+- Try to Google domain name information to find email structure (`jdoe@email.com`)
+- Use `username-anarchy` tool to create a username list (need first and last name?)
+	- `username-anarchy -i [file with names] > [output]`
+	- With just a name and no file: `username_anarchy [firstname] [lastname] > [output]`
+
+
 # Network Service Password Attacks
 
 #### SMB
@@ -145,49 +191,4 @@ Crcaking BitLocker Drives
 - `hashcat -m 22100 backup.hash [wordlist] -o backup.cracked` for this hash type
 - `cat backup.cracked`
 
-
-# User/Pass Mutations
-
-CeWL: word scanner
-- `cewl [URL] -d 4 -m 6 --lowercase -w [website.wordlist]`
-	- `-d` depth to spider the website
-	- `-m` minimum length of word to record
-	- store in `--lowercase` for mutation purposes
-	- output to a wordlist file `[name].wordlist`
-	- `wc -l [wordlist]` to count how many you made
-
-Hashcat
-	- both `hashcat` and `john` have the `best64.rule` for common mutations
-	- `hashcat --force [wordlist] -r [custom.rule file] --stdout | sort -u > mut_password.list` 
-		- `[wordlist]` should be lowercase passwords (see CeWL above)
-		- `custom.rule` is the mutation rules (see below)
-		- `mut_password.list` is the output
-	- `ls /usr/share/hashcat/rules/` shows rule files
-
-Hashcat mutation syntax
-	- https://hashcat.net/wiki/doku.php?id=rule_based_attack
-	- `:` do nothing
-	- `l` lowercase all letters
-	- `u` uppercase all letters
-	- `c` capitalize first letter and lowercase the rest
-	- `sXY` replaces every `X` with `Y`
-	- `$!` Add exclamation at the end
-
-Credential Stuffing
-- `hydra -C [user_pass.list] [protocol]://[IP]`
-	- the `user_pass.list` should be formatted with items as `username:password`
-
-
-Username mutation
-- Consider some common business username conventions:
-	- Jane Doe
-	- jdoe
-	- jjdoe
-	- janedoe
-	- jane.doe
-	- doe.jane
-- Try to Google domain name information to find email structure (`jdoe@email.com`)
-- Use `username-anarchy` tool to create a username list (need first and last name?)
-	- `username-anarchy -i [file with names] > [output]`
-	- With just a name and no file: `username_anarchy [firstname] [lastname] > [output]`
 
