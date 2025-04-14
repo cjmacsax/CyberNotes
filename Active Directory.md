@@ -106,6 +106,15 @@ Nested Group Membership: a Domain Local Group can have another Domain Local Grou
 # AD Protocols
 
 
+Common ports used by services that `enum4linux` can access
+
+| `nmblookup` | 137/UDP                                       |
+| ----------- | --------------------------------------------- |
+| `nbstat`    | **137/UDP**                                   |
+| `net`       | **139/TCP, 135/TCP/UDP, 49152-65535/TCP/UDP** |
+| `rpcclient` | **135/TCP**                                   |
+| `smbclient` | **445/TCP**                                   |
+
 #### Kerberos, port 88
 - Authentication Protocol. The basis of this protocol is that the password is never transmitted over the internet.
 - Grants tickets to users that allow access. Clients will send requests that are encrypted and Kerberos will decrypt the request with the stored password for that user to determine if the request is from a valid user.
@@ -188,6 +197,16 @@ AD specific wordlists
 	- move binaries into the PATH, such as `/usr/local/bin/kerbrute` to easily use from anywhere
 - `Kerbrute userenum -d [domain] --dc [IP] jsmith.txt -o [outfile]`
 
+Enumerate password policy
+- `rpcclient -U "" -N [IP]`
+	- if a NULL session is configured, use `querydominfo`
+- `enum4linux`, see above in [[#AD Protocols]] for services compatible
+	- `-P` get password policy information via RPC
+	- `-oA` outfile in YAML and JSON
+- `ldapsearch` LDAP Anonymous Bind
+	- `ldapsearch -h 172.16.5.5 -x -b "DC=INLANEFREIGHT,DC=LOCAL" -s sub "*" | grep -m 1 -B 10 pwdHistoryLength`
+- If authenticated on a Windows host:
+	- `net accounts`
 
 # Pass the Hash
 Some of these techniques are very useful for pivoting within a network. Pay close attention to the IP address and domain you are using (and which device the hashes are for )

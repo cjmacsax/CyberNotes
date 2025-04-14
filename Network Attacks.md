@@ -370,7 +370,6 @@ Read files with MySQL: `select LOAD_FILE("/etc/passwd");`
 
 # Windows Protocols
 
-
 MSRPC. 135
 - `rpcclient [IP] -U [user]` for MS-RPC
 		- once authenticated, try these commands:
@@ -379,6 +378,7 @@ MSRPC. 135
 		- `netshareenumall`
 		- `enumdomusers`
 		- `queryuser [RID]`
+- You can use `enum4linux`, see [[Active Directory#AD User/Password Attacks]]
  
 WinRM, 5985, 5986
 	- `evil-winrm -i [IP] -u [user] -p [pass]`
