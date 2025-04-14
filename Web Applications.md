@@ -91,6 +91,10 @@ If you see a `.cgi` page or script on the server, sheck for the `http-shellshock
 # Automated Discovery
 
 Dirsearch
+- `-u` host
+- `-w` wordlist
+- `-r` recursive
+- `-R` recursive depth
 
 Gobuster (most of these options apply to `dir` mode)
 - `-u` host
