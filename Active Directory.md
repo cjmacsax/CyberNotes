@@ -155,9 +155,7 @@ Common ports used by services that `enum4linux` can access
 
 # Enumeration
 
-## Users
-
-Check [[Enumeration]] for host discovery techniques
+## AD Host Enumeration
 ### LLMNR & NBT-NS Primer
 
 Link-Local Multicast Name Resolution and NetBIOS Name Service are an alternate method of host identification that can be used when DNS fails. LLMNR is UDP 5355. LLMNR/NBT-NS allows any host on the network to respond, meaning we can easily spoof if we have access to the network.
@@ -185,28 +183,37 @@ The goal is get the victim to communicate with our system and capture the NetNTL
 	- `GET NTLMV2UNIQUE`
 	- `GET NTLMV2USERNAMES`
 
-### AD User/Password Attacks
+## AD User/Password Attacks
 
 AD specific wordlists 
 - `jsmith.txt` or `jsmith2.txt` username lists from `Insidetrust` https://github.com/insidetrust/statistically-likely-usernames
 
-`Kerbrute` https://github.com/ropnop/kerbrute.git
-- Setting up
-	- `sudo make all` will compile all types of binaries and place them in `/kerbrute/dist`
-	- Note: try to compile on the target if possible
-	- move binaries into the PATH, such as `/usr/local/bin/kerbrute` to easily use from anywhere
-- `Kerbrute userenum -d [domain] --dc [IP] jsmith.txt -o [outfile]`
 
-Enumerate password policy
+Enumerate users and password policies
+- `Kerbrute` https://github.com/ropnop/kerbrute.git
+	- Setting up
+		- `sudo make all` will compile all types of binaries and place them in `/kerbrute/dist`
+		- Note: try to compile on the target if possible
+		- move binaries into the PATH, such as `/usr/local/bin/kerbrute` to easily use from anywhere
+	- `Kerbrute userenum -d [domain] --dc [IP] jsmith.txt -o [outfile]`
+	- `userenum` will not lock out an account, however, if you use `kerbrute` for password spraying that is a potential consequence
 - `rpcclient -U "" -N [IP]`
 	- if a NULL session is configured, use `querydominfo`
-- `enum4linux`, see above in [[#AD Protocols]] for services compatible
+- SMB NULL with `enum4linux`, see above in [[#AD Protocols]] for more service options
 	- `-P` get password policy information via RPC
 	- `-oA` outfile in YAML and JSON
-- `ldapsearch` LDAP Anonymous Bind
+- SMB Enumeration
+	- `crackmapexec smb [IP] --users`
+- LDAP Anonymous Bind `ldapsearch` or `windapsearch`
 	- `ldapsearch -h 172.16.5.5 -x -b "DC=INLANEFREIGHT,DC=LOCAL" -s sub "*" | grep -m 1 -B 10 pwdHistoryLength`
+	- `windapsearch` is an easier tool to use
+	- `windapsearch --dc-ip 172.16.5.5 -u "" -U`
 - If authenticated on a Windows host:
 	- `net accounts`
+
+Once you have found a valid set of credentials through enumerating and password spraying, use `crackmapexec` to get a valid user list
+- `sudo crackmapexec smb [IP] -u [valid_user] -p [valid_pass] --users`
+
 
 # Pass the Hash
 Some of these techniques are very useful for pivoting within a network. Pay close attention to the IP address and domain you are using (and which device the hashes are for )
