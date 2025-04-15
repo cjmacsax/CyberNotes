@@ -97,7 +97,15 @@ Dirsearch
 - `-R` recursive depth
 
 FFUF
-- 
+- Sample usage: `ffuf -u 'http://nocturnal.htb/view.php?username=FUZZ&file=shell.php.pdf' -w /usr/share/wordlists/seclists/Usernames/Names/names.txt -H 'Cookie: PHPSESSID=7il3tfj6ttrp250btu9aiena7a' -fs 2985`
+- `-u` URL (with `FUZZ` placed where you want it)
+- `-w` wordlist
+- `-H '[value]'` add HTTP headers
+- `-X` HTTP Request Method
+- `-fs` filter response size
+- `-fc` filter HTTP status codes
+- `-r` recursion
+- `-request` file containing HTTP request
 
 Gobuster (most of these options apply to `dir` mode)
 - `-u` host
