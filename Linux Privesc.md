@@ -45,7 +45,11 @@ Environment
 - `Env` shows environment variables
 	- PATH may have a compiler or scripting language that can be used to run code on the target system
 
-- Netstat
+`ss` Secure Sockets
+- For identifying services listening on ports
+- `ss -tuln`
+
+Netstat
 	- `-a` for all listening ports and established connections
 	- `-at` for TCP protocols
 	- `-au` for UDP protocols
