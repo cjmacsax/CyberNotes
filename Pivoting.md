@@ -5,9 +5,8 @@ Each network interface has the address of your machine on that network and the n
 - `tun0` means tunneled network interface
 - `netstat -r` will show your routing table and you can see what interface will be used for a particular IP address
 
-## TCPDUMP
+### TCPDUMP
 
-`tcpdump`
 - `-i [interface]` listen on any interface (or, `-i any`)
 - if you don't have` ifconfig`, use `ip a s`
 - `-w [file]` saves results to a pcap file
