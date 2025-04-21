@@ -395,5 +395,3 @@ Evil-WinRM via a proxychain
 
 Additionally, you can convert `ccache` (linux) to `kirbi` (windows) with `impacket`
 - `impacket-ticketConverter [ccache file] [kirbi output]`
-
-ssss
