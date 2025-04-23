@@ -211,7 +211,7 @@ Enumerate users and password policies
 - If authenticated on a Windows host:
 	- `net accounts`
 
-Once you have found a valid set of credentials through enumerating and password spraying, use `crackmapexec` to get a valid user list
+Once you have found a valid set of credenti through enumerating and password spraying, use `crackmapexec` to get a valid user list
 - `sudo crackmapexec smb [IP] -u [valid_user] -p [valid_pass] --users`
 
 
