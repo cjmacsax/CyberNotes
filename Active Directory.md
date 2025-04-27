@@ -253,6 +253,8 @@ It's common for local administrator accounts across a network to use similar cre
 
 ## Credentialed Enumeration
 
+If you have a foothold try these techniques for further access.
+
 # Pass the Hash
 Some of these techniques are very useful for pivoting within a network. Pay close attention to the IP address and domain you are using (and which device the hashes are for )
 
