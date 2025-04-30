@@ -25,7 +25,7 @@
 ## Users and Machine Accounts
 
 ### Local Accounts
-- assigned rights on a host either individually or with group membership.\
+- assigned rights on a host either individually or with group membership.
 - Administrator (SID S-1-5-domain-500) is the first account on a Windows install. It cannot be removed but can be disabled or renamed. It has full control over almost all resources.
 - Guest: diabled by default
 - SYSTEM: or (NT AUTHORITY\SYSTEM): is the default account used by the Operating System to perform functions. This is not necessarily a *user* unlike the Administrator account - it represents the OS. It does *not* appear in User Manager and can't be added to groups.
@@ -39,6 +39,9 @@
 - UserPrincipalName (UPN): primary logon for the user, usually the domain email address
 - SAMAccountName: logon name that supports the previous version of windows clients
 - `Get-ADUser -Identity [user]` to view user attributes
+- RID vs. SID
+	- SID is the domain identifier for all security principals (users, groups, machines) in a domain.
+	- RID is a unique value for a newly created object within a domain, you will find it at the end of the SID for a security principal.
 
 Non-Domain Joined computers: can have `workgroups` that are not managed by domain policy, but allow for sharing resources to other hosts in the workgroup.
 
@@ -260,7 +263,38 @@ If you have a foothold or valid credentials (cleartext password, NTLM hash, loca
 	- `--users` enumerate Domain users
 	- `--groups` enumerate Domain groups
 	- `--loggedon-users` enumerate what users are logged in
-	- 
+		- If you execute this one and see `Pwn3d!` this means the credentials you entered are a local admin account
+	- `--shares` enumerates available shares and the level of access we have for them
+		- add `-M spider_plus --share 'share_name'` to dig through readable shares and list all files
+		- Results are written to a JSON file in `/tmp/cme_spider_plus/[IP_of_host]`
+
+`rpcclient`
+- if NULL session is configured use `-U "" -N [IP]`
+- RID is usually represented as an integer value but you will need the Hex equivalent for an rpcclient session. For example, the built-in Administrator account for the domain will always have the RID 500, or `0x1f4`.
+- `enumdomusers` will show user RIDs
+- `queryuser [RID]`
+
+`impacket`
+- `Psexec.py`
+	- a clone of Sysinternals psexec
+	- `impacket-psexec inlanefreight.local/[user]:'password'@172.10.10.10`
+	- this will work if you get credentials for a user with local administrator privileges
+- `wmiexec.py`
+	- a more stealthy approach, but still likely caught by modern anti-virus
+
+`windapsearch.py`
+- https://github.com/ropnop/windapsearch
+- `-da` enumerate domain admins group
+- `-PU` find privileged users
+
+`bloodhound.py`
+- https://github.com/dirkjanm/BloodHound.py
+- You can `pip install bloodhound`
+- `-c` (`--collectionmethod`) can retrieve specific data such as users, groups, ACLs, or `all`
+- `-ns [IP]` 
+- `-d [domain]`
+- will output logs in the current working directory
+- see the `Active Directory BloodHound` for more learning on the GUI for bloodhound and advanced techniques that it offers.
 
 # Pass the Hash
 Some of these techniques are very useful for pivoting within a network. Pay close attention to the IP address and domain you are using (and which device the hashes are for )
