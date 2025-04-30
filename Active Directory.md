@@ -283,9 +283,14 @@ If you have a foothold or valid credentials (cleartext password, NTLM hash, loca
 	- a more stealthy approach, but still likely caught by modern anti-virus
 
 `windapsearch.py`
+- Enumerates domain info using LDAP queries
 - https://github.com/ropnop/windapsearch
+- `--dc-ip`
+- `-u user@domain`
 - `-da` enumerate domain admins group
 - `-PU` find privileged users
+- `-G` enumerate groups
+- `-U` enumerate users
 
 `bloodhound.py`
 - https://github.com/dirkjanm/BloodHound.py
