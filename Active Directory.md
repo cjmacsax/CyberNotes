@@ -253,9 +253,16 @@ It's common for local administrator accounts across a network to use similar cre
 
 ## Credentialed Enumeration
 
-If you have a foothold try these techniques for further access.
+If you have a foothold or valid credentials (cleartext password, NTLM hash, local SYSTEM session) try these techniques for further access.
 
-# Pass the Has
+`crackmapexec`
+- `smb`
+	- `--users` enumerate Domain users
+	- `--groups` enumerate Domain groups
+	- `--loggedon-users` enumerate what users are logged in
+	- 
+
+# Pass the Hash
 Some of these techniques are very useful for pivoting within a network. Pay close attention to the IP address and domain you are using (and which device the hashes are for )
 
 NTLM hashed stored on the DC are not salted and can be passed
