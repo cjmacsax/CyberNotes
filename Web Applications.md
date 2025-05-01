@@ -106,6 +106,14 @@ FFUF
 - `-fc` filter HTTP status codes
 - `-r` recursion
 - `-request` file containing HTTP request
+- for `vhost`
+	- `-H "Host: FUZZ.acmeitsupport.thm" -u http://10.10.10.10`
+	- This specifies the host request header
+
+Sublist3r
+- For subdomain enumeration (NOT VHOSTS)
+
+
 
 Gobuster (most of these options apply to `dir` mode)
 - `-u` host
