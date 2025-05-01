@@ -97,7 +97,9 @@ Find all SUID/SGID bit sets on machine
 # Shell Upgrade
 
 Upgrade from shitty shell
-`python3 -c 'import pty;pty.spawn ("/bin/bash")'`
+- `python3 -c 'import pty;pty.spawn ("/bin/bash")'`
+- `script /dev/null -c bash`
+
 
 from VIM
 `vim -c ':!/bin/sh'`
