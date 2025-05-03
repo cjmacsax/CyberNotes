@@ -301,6 +301,8 @@ If you have a foothold or valid credentials (cleartext password, NTLM hash, loca
 - will output logs in the current working directory
 - see the `Active Directory BloodHound` for more learning on the GUI for bloodhound and advanced techniques that it offers.
 
+
+
 # Pass the Hash
 Some of these techniques are very useful for pivoting within a network. Pay close attention to the IP address and domain you are using (and which device the hashes are for )
 
