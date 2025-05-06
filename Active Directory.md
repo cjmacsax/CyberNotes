@@ -301,7 +301,19 @@ If you have a foothold or valid credentials (cleartext password, NTLM hash, loca
 - will output logs in the current working directory
 - see the `Active Directory BloodHound` for more learning on the GUI for bloodhound and advanced techniques that it offers.
 
+### From a Windows Machine
+Useful if your foothold is a Windows machine
 
+`ActiveDirectory` PowerShell Module
+- https://learn.microsoft.com/en-us/powershell/module/activedirectory/?view=windowsserver2022-ps
+- `Get-ADDomain`
+- `Get-ADUser`
+- `Get-ADGroup`, and `Get-ADGroupMember -Identity "GroupName"` to view member list
+
+`PowerView.ps1`
+- `Get-DomainUser -Identity username -Domain domain.local
+- `Get-DomainGroupMember -Identity "GroupName" -Recurse` identifies users in a group and enumerates nested groups with `-Recurse`
+- 
 
 # Pass the Hash
 Some of these techniques are very useful for pivoting within a network. Pay close attention to the IP address and domain you are using (and which device the hashes are for )
