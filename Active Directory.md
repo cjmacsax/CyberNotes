@@ -318,6 +318,12 @@ Useful if your foothold is a Windows machine
 - acquires credentials or other data in an AD environment.
 - `Snaffler.exe -s -d domain.local -o snaffler.log -v data`
 
+`SharpHound.exe`
+- Data collector for Bloodhound
+- https://github.com/SpecterOps/SharpHound
+- `SharpHound.exe -c All --zipfilename filename` collects all kinds of data from an AD environment
+- open `bloodhound` in CMD prompt, and `Upload Data` and select the created zip file
+
 # Pass the Hash
 Some of these techniques are very useful for pivoting within a network. Pay close attention to the IP address and domain you are using (and which device the hashes are for )
 
