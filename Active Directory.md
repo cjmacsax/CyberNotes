@@ -313,6 +313,8 @@ Useful if your foothold is a Windows machine
 `PowerView.ps1`
 - `Get-DomainUser -Identity username -Domain domain.local
 - `Get-DomainGroupMember -Identity "GroupName" -Recurse` identifies users in a group and enumerates nested groups with `-Recurse`
+
+`SharpView`
 - 
 
 # Pass the Hash
