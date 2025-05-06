@@ -323,6 +323,7 @@ Useful if your foothold is a Windows machine
 - https://github.com/SpecterOps/SharpHound
 - `SharpHound.exe -c All --zipfilename filename` collects all kinds of data from an AD environment
 - open `bloodhound` in CMD prompt, and `Upload Data` and select the created zip file
+- In the search bar you can query the domain such as `inlanefreight.local` with something like `Find Computers where Domain Users are Local Admin`
 
 # Pass the Hash
 Some of these techniques are very useful for pivoting within a network. Pay close attention to the IP address and domain you are using (and which device the hashes are for )
