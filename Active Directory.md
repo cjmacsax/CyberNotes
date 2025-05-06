@@ -315,7 +315,7 @@ Useful if your foothold is a Windows machine
 - `Get-DomainGroupMember -Identity "GroupName" -Recurse` identifies users in a group and enumerates nested groups with `-Recurse`
 
 `Snaffler.exe`
-- acquires credentials or other data in an AD environment.
+- acquires credentials or other data in an AD environment. Useful for file hunting
 - `Snaffler.exe -s -d domain.local -o snaffler.log -v data`
 
 `SharpHound.exe`
