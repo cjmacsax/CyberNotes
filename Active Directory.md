@@ -314,8 +314,9 @@ Useful if your foothold is a Windows machine
 - `Get-DomainUser -Identity username -Domain domain.local
 - `Get-DomainGroupMember -Identity "GroupName" -Recurse` identifies users in a group and enumerates nested groups with `-Recurse`
 
-`SharpView`
-- 
+`Snaffler.exe`
+- acquires credentials or other data in an AD environment.
+- `Snaffler.exe -s -d domain.local -o snaffler.log -v data`
 
 # Pass the Hash
 Some of these techniques are very useful for pivoting within a network. Pay close attention to the IP address and domain you are using (and which device the hashes are for )
