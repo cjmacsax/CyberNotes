@@ -1,6 +1,6 @@
 # PentestNotes
 
-Obsidian Notes for CPTS and other pentest resources
+Obsidian Notes for Pentesting (CPTS) as well as SOC (THM SLA1, CDSA)
 
 Useful Obsidian Git settings:
 - `CTRL + P` to open command palette, `Git: Commit-and-sync`
