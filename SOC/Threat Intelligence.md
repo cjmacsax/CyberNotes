@@ -19,4 +19,10 @@ Talos Intelligence
 - https://tryhackme.com/room/threatinteltools
 - Cisco's tool for threat intelligence
 
+VirusTotal
+- https://www.virustotal.com/gui/file/435bfc4c3a3c887fd39c058e8c11863d5dd1f05e0c7a86e232c93d0e979fdb28
+- Malware details, aliases, signatures, etc.
+
+
+
 
