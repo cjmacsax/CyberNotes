@@ -31,4 +31,18 @@ rule dummy #declare rule
 	- `any of them`
 	- comparison operators `<= >= !=` which will return based on the count of string occurences
 	- multiple arguments `$hello_world and filesize < 10KB`
+
+## Yara Tools
+
+https://github.com/InQuest/awesome-yara
+### Loki
+- open-source Indicator of Compromise (IOC) scanner
+- Download https://github.com/Neo23x0/Loki/releases
+- README https://github.com/Neo23x0/Loki/blob/master/README.md
+
+### Thor
+- IOC and Yara scanner
+- Download https://www.nextron-systems.com/thor-lite/
+
+### FENRIR
 - 
