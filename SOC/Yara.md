@@ -40,7 +40,8 @@ https://github.com/InQuest/awesome-yara
 - Download https://github.com/Neo23x0/Loki/releases
 - README https://github.com/Neo23x0/Loki/blob/master/README.md
 - Navigate to `Loki/signature-base` to see what premade yara rules exist for common threats
-- 
+- `python loki.py -p [malicious_file]`
+	- `-p` path to file
 
 ### Thor
 - IOC and Yara scanner
@@ -55,3 +56,14 @@ https://github.com/InQuest/awesome-yara
 - helps manage multiple Yara repositories
 - imports a set of high-quality YARA rules and then lets researchers add their own rules, disable rules, and run scans of files.
 - Only runs on Linux
+
+### yarGen
+- generator for YARA rules
+- For example. if we run `YARA` on a webshell but it detects nothing, this means we need a new ruleset so it can be detected in the future or on other servers.
+- `python3 yarGen.py -m [path] --excludegood -o [path]`
+	- `-m` is the malicious file we need to detect
+	- `-o` is output for new rule file
+	- `--excludegood` force to exclude all goodware strings to avoid false positives
+### yarAnalyzer
+- creates statistics on a yara rule set and files in a sample directory
+- creates a CSV file with information about selected rules
