@@ -39,10 +39,19 @@ https://github.com/InQuest/awesome-yara
 - open-source Indicator of Compromise (IOC) scanner
 - Download https://github.com/Neo23x0/Loki/releases
 - README https://github.com/Neo23x0/Loki/blob/master/README.md
+- Navigate to `Loki/signature-base` to see what premade yara rules exist for common threats
+- 
 
 ### Thor
 - IOC and Yara scanner
 - Download https://www.nextron-systems.com/thor-lite/
 
 ### FENRIR
-- 
+- https://github.com/Neo23x0/Fenrir
+- bash script capable of running similar functions as previous 2 tools
+
+### YAYA
+- Yet Another Yara Automation
+- helps manage multiple Yara repositories
+- imports a set of high-quality YARA rules and then lets researchers add their own rules, disable rules, and run scans of files.
+- Only runs on Linux
