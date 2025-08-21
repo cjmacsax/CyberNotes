@@ -67,3 +67,8 @@ https://github.com/InQuest/awesome-yara
 ### yarAnalyzer
 - creates statistics on a yara rule set and files in a sample directory
 - creates a CSV file with information about selected rules
+
+### Valhalla
+- https://www.nextron-systems.com/valhalla/
+- Can search Yara rules based on keyword, ATT&CK techniques, hash, or rule names.
+- 
