@@ -67,4 +67,3 @@ https://github.com/InQuest/awesome-yara
 ### yarAnalyzer
 - creates statistics on a yara rule set and files in a sample directory
 - creates a CSV file with information about selected rules
-d
