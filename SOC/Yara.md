@@ -71,4 +71,4 @@ https://github.com/InQuest/awesome-yara
 ### Valhalla
 - https://www.nextron-systems.com/valhalla/
 - Can search Yara rules based on keyword, ATT&CK techniques, hash, or rule names.
-- 
+- 53fe44b4753874f079a936325dd1fdc9b1691956a29c3aaf8643cdbd49f5984bf
