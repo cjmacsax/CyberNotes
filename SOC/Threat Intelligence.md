@@ -29,6 +29,10 @@ OpenCTI
 - Activities Section: covers security incidents and reports
 - Knowledge Section: linked data related to adversarial TTP
 
+MISP - Malware Information Sharing Platform
+- open-source, collects and stores info on IOCs and malware
+- Has API support to fetch and export events and intelligence
+
 
 
 
