@@ -32,6 +32,7 @@ OpenCTI
 MISP - Malware Information Sharing Platform
 - open-source, collects and stores info on IOCs and malware
 - Has API support to fetch and export events and intelligence
+- Has IDS signature rules that you can use
 
 
 
